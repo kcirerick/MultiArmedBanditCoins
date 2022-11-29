@@ -3,4 +3,3 @@ class Game:
         self.numCoins = numCoins
         self.numTries = numTries
         self.cells = [Cell() for i in range(numCoins)]
-        
