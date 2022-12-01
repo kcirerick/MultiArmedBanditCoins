@@ -17,6 +17,9 @@ class Cell:
     def getCoinEstimate():
         return self.totalHeads / totalFlips
 
+    def getTrend():
+        return self.trend
+
     def flipCoin():
         self.totalFlips += 1
         self.totalHeads += self.coin.flip() # flip will either be zero or one
