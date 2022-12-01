@@ -6,7 +6,7 @@ class Cell:
         # Begin the game with two totalFlips and one totalHeads to obtain a laplacian estimate
         self.totalFlips = 2
         self.totalHeads = 1
-        self.trend = []
+        self.trend = [0.5]
 
     def getTotalHeads():
         return self.totalHeads - 1 # Subtract one in the display to hide laplacian prior

@@ -15,7 +15,7 @@ for cell in cells:
 
 def activate_cell(cell):
     cell.flipCoin()
-    self.getTotalHeads()
+    self.getTotalHeads() # Empty values can be assumed to be generic st.write() calls.
     self.getTotalFlips()
     self.getCoinEstimate()
-    self.trend()
+    st.line_chart(self.trend())
