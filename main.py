@@ -1,23 +1,92 @@
-from GameMechanics.Cell import Cell
-from GameMechanics.Coin import Coin
-from GameMechanics.Game import Game
 import streamlit as st
-"""
-Welcome to coin explorer. In this game, your goal is to try to flip as many heads as possible by doing 100 flips of 10 biased coins
-whose bias towards landing on heads is uniformly distributed from 0% to 100%. Unfortunately for you, you won't know
-what each coin's true bias is, so it will be difficult to know if you are flipping a coin with a 10% bias towards heads
-or a 90% bias towards heads. The best you can do is flip the coins and find out! On every turn, you are free to choose any of the 10 coins
-to flip. This game involves a little bit of luck, but making good choices can certainly increase your surface area for serendipity!
-"""
-NUM_COINS = 1
-def activate_cell(cell):
-    cell.flipCoin()
-    self.getTotalHeads() # Empty values can be assumed to be generic st.write() calls.
-    self.getTotalFlips()
-    self.getCoinEstimate()
-    st.line_chart(self.trend())
+import numpy as np
 
-cells = [Cell() for i in range(NUM_COINS)]
-for cell in cells:
-    button = st.button("Coin")
-    st.write(button, on_click = activate_cell(cell))
+# Set the number of coins and number of flips
+NUM_COINS = 10
+NUM_FLIPS = 100
+NUM_ROWS = 5
+NUM_COLS = 2
+
+# Initialize an array to track the number of heads for each coin
+heads = np.zeros(NUM_COINS)
+
+# Initialize an array to track the biases of the coins
+biases = np.random.rand(NUM_COINS)
+
+# Initialize an array to track the bayesian priors for each coin's bias
+priors = np.ones(NUM_COINS) / 2
+
+def update_game():
+    pass
+
+def update_line_chart():
+    print("Confirmed")
+
+# Create a function to update the bayesian prior for a coin's bias
+# based on the number of heads and number of flips for that coin
+def update_prior(prior, heads, flips):
+    # Compute the probability of getting heads given the current bias
+    p_heads = prior * flips
+    # Compute the probability of getting tails given the current bias
+    p_tails = (1 - prior) * flips
+    # Compute the probability of getting the observed number of heads
+    p_observed = np.math.comb(flips, int(heads))
+    # Update the bayesian prior using Bayes' theorem
+    return (p_observed * p_heads) / (p_observed * p_heads + p_observed * p_tails)
+
+# Create a function to flip a coin with a given bias and update the
+# number of heads for that coin
+def flip_coin(bias, heads):
+    pass
+    # Flip a coin with the given bias and update the number of heads
+    if np.random.rand() < bias:
+        heads += 1
+    return heads
+
+def create_containers():
+    containers = [st.beta_container() for i in range(NUM_COINS)]
+    grid = st.grid(
+        [[containers((i+1) * (j+1)) for j in range(NUM_COLS)] for i in range(NUM_ROWS]
+    )
+    return containers, grid
+
+# Create a function to draw the current state of the game
+def draw_game(biases, heads, priors):
+    containers, grid = create_containers()
+    
+    # create a list of line charts, one for each button
+    line_charts = [[
+        st.line_chart([0.5])
+        for j in range(NUM_COLS)]
+    for i in range(NUM_ROWS)]
+
+    # create a grid of buttons
+    button_grid = [[
+        st.button(
+            label = "H".format(i, j),
+            key = "Button {}-{}".format(i, j),
+            on_click = update_game(),
+            args = (i, j, line_charts[i][j])
+        )
+        for j in range(NUM_COLS)]
+    for i in range(NUM_ROWS)]
+
+    for i in range(NUM_ROWS):
+        for j in range(NUM_COLS):
+            st.write(button_grid[i][j])
+
+# Create the main game loop
+while True:
+    # Draw the current state of the game
+    draw_game(biases, heads, priors)
+    # Check if the game is over
+    if np.sum(heads) == NUM_FLIPS:
+        # Compute the total number of heads
+        total_heads = np.sum(heads)
+        # Compute the total number of tails
+        total_tails = NUM_FLIPS - total_heads
+        # Show the final results
+        st.success(f"Game over! You got {total_heads} heads and {total_tails} tails.")
+        # Break out of the loop
+        break
+

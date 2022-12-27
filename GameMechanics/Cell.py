@@ -16,7 +16,7 @@ class Cell:
         return self.totalFlips - 2 # Subtract two in the display to hide the laplacian prior
 
     def getCoinEstimate(self):
-        return self.totalHeads / totalFlips
+        return self.totalHeads / self.totalFlips
 
     def getTrend(self):
         return self.trend
