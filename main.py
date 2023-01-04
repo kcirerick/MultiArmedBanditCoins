@@ -44,36 +44,49 @@ def flip_coin(bias, heads):
     return heads
 
 def create_containers():
-    containers = [st.beta_container() for i in range(NUM_COINS)]
-    grid = st.grid(
-        [[containers((i+1) * (j+1)) for j in range(NUM_COLS)] for i in range(NUM_ROWS]
-    )
-    return containers, grid
+    with st.container():
+        col1, col2 = st.columns(2)
+        with col1:
+            st.button(
+                        label = "H".format(0, 0),
+                        key = "Button {}-{}".format(0, 0)
+#                         on_click = update_game(),
+#                         args = (i, j, line_charts[i][j])
+                    )
+        with col2:
+            st.button(
+                                    label = "H".format(0, 1),
+                                    key = "Button {}-{}".format(0, 1)
+            #                         on_click = update_game(),
+            #                         args = (i, j, line_charts[i][j])
+                                )
+    return #containers, grid
 
 # Create a function to draw the current state of the game
 def draw_game(biases, heads, priors):
-    containers, grid = create_containers()
-    
-    # create a list of line charts, one for each button
-    line_charts = [[
-        st.line_chart([0.5])
-        for j in range(NUM_COLS)]
-    for i in range(NUM_ROWS)]
+    #containers, grid = create_containers()
+    create_containers()
 
-    # create a grid of buttons
-    button_grid = [[
-        st.button(
-            label = "H".format(i, j),
-            key = "Button {}-{}".format(i, j),
-            on_click = update_game(),
-            args = (i, j, line_charts[i][j])
-        )
-        for j in range(NUM_COLS)]
-    for i in range(NUM_ROWS)]
-
-    for i in range(NUM_ROWS):
-        for j in range(NUM_COLS):
-            st.write(button_grid[i][j])
+#     # create a list of line charts, one for each button
+#     line_charts = [[
+#         st.line_chart([0.5])
+#         for j in range(NUM_COLS)]
+#     for i in range(NUM_ROWS)]
+#
+#     # create a grid of buttons
+#     button_grid = [[
+#         st.button(
+#             label = "H".format(i, j),
+#             key = "Button {}-{}".format(i, j),
+#             on_click = update_game(),
+#             args = (i, j, line_charts[i][j])
+#         )
+#         for j in range(NUM_COLS)]
+#     for i in range(NUM_ROWS)]
+#
+#     for i in range(NUM_ROWS):
+#         for j in range(NUM_COLS):
+#             st.write(button_grid[i][j])
 
 # Create the main game loop
 while True:
